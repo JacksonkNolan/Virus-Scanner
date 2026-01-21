@@ -1,10 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-# =================================================================
-#  ADVANCED MAC THREAT SCANNER v3.1 (Dev-Friendly Edition)
-#  Fixes: Ignores Unity/Dev caches + Zips + Apps + Loop
-# =================================================================
+
 
 # 1. CONFIGURATION
 # ----------------
@@ -18,7 +15,7 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-# Temp folder for unzipping archives safely
+
 TEMP_DIR="/tmp/hyperscan_lite_extract"
 
 # 2. THE SCAN ENGINE FUNCTION
@@ -43,10 +40,6 @@ run_scan() {
     # Create/Clear report
     echo "Scan Report - $(date)" > scan_report.txt
 
-    # ---------------------------------------------------------
-    #  MAIN FILE LOOP
-    #  Now with strict exclusions for Developer folders
-    # ---------------------------------------------------------
     find "$TARGET" -type f -size -50M \
         ! -path "*/.git/*" \
         ! -path "*/Library/*" \
@@ -62,10 +55,9 @@ run_scan() {
         filename=$(basename "$file")
         extension="${filename##*.}"
 
-        # Nice progress indicator
+
         echo -ne "\r ${BLUE}Scanning:${NC} ...${filename:0:30}                               "
 
-        # --- SPECIAL HANDLING: ZIP FILES ---
         if [[ "$extension" == "zip" ]]; then
             rm -rf "$TEMP_DIR"
             mkdir -p "$TEMP_DIR"
@@ -96,9 +88,7 @@ run_scan() {
 
     done
 
-    # ---------------------------------------------------------
-    #  SUMMARY
-    # ---------------------------------------------------------
+
     echo -e "\n\n════════════════════════════════════════════"
     echo " Files Analyzed: $TOTAL_SCANNED"
     
